@@ -1,5 +1,5 @@
 # NewsTree
-The News Tree Project by John Herrick
+The News Tree Project by [John Herrick](https://www.linkedin.com/in/herrickjohn1)
 
 **Developed By John Herrick. Powered By Watson.**
 
@@ -19,7 +19,7 @@ As well, you have the option to delve deeper in your exploration of the news by 
 
 See "How To Use" below.
 
-## How To users
+## How To Use
 
 Paste a link to any news article URL into the text box. Alternately, you may uncheck the "Search URL" checkbox to analyze plaintext directly.
 
@@ -29,7 +29,7 @@ You may also click the "Knowledge Graph Representation" button to view a knowled
 
 ## Credits
 
-This project was created by John Albert Herrick II.
+This project was created by [John Albert Herrick II](https://www.linkedin.com/in/herrickjohn1).
 
 Developed using React and D3.
 
