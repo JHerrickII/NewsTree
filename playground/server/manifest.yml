@@ -1,0 +1,7 @@
+applications:
+- name: nlu-example
+  host: nluBase
+  memory: 256M
+  disk_quota: 512M
+  buildpack: nodejs_buildpack
+  command: node nlu_example.js

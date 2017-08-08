@@ -1,0 +1,4 @@
+name: nlurelationsviz
+memory: 512M 
+command: npm start 
+host: nlurelationsviz

@@ -1,0 +1,416 @@
+/*body {
+  margin: 30px;
+  padding: 170px;
+  padding-top: -140px;
+  font-family: helvetica;
+  padding-left: 170px;*/
+  /*background-color: #33FCFF;
+}*/
+
+/*body TreeRel{
+  padding-left: 170px;
+}*/
+
+#userInput{
+  width: 60%;
+  text-align: center;
+}
+
+#userInput:hover{
+  box-shadow: 10px 10px 5px #888888;
+  transition-duration: 1s;
+}
+
+#checkboxInput{
+  margin-top: 20px;
+}
+
+h1:hover{
+  /*background-color: #33FCFF;*/
+  cursor: pointer;
+}
+
+
+input[type=text] {
+    padding: 0;
+    height: 30px;
+    position: relative;
+    left: 0;
+    outline: none;
+    border: 1px solid #cdcdcd;
+    border-color: rgba(0,0,0,.15);
+    background-color: white;
+    font-size: 16px;
+}
+
+.button{
+  margin-top: 30px;
+  width: 400px;
+  align-items: center;
+}
+
+.button:hover{
+  box-shadow: 10px 10px 5px #888888;
+  transition-duration: 1s;
+}
+
+
+svg{
+    display: block;
+    margin: auto;
+}
+
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,700,700italic,400italic);
+/* http://meyerweb.com/eric/tools/css/reset/
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline; }
+
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure,
+footer, header, hgroup, menu, nav, section {
+  display: block; }
+
+body {
+  line-height: 1; }
+
+ol, ul {
+  list-style: none; }
+
+blockquote, q {
+  quotes: none; }
+
+blockquote:before, blockquote:after,
+q:before, q:after {
+  content: '';
+  content: none; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box; }
+
+/**
+ * For modern browsers
+ * 1. The space content is one way to avoid an Opera bug when the
+ *    contenteditable attribute is included anywhere else in the document.
+ *    Otherwise it causes space to appear at the top and bottom of elements
+ *    that are clearfixed.
+ * 2. The use of `table` rather than `block` is only necessary if using
+ *    `:before` to contain the top-margins of child elements.
+ */
+.cf:before,
+.cf:after {
+  content: " ";
+  /* 1 */
+  display: table;
+  /* 2 */ }
+
+.cf:after {
+  clear: both; }
+
+/**
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+.cf {
+  *zoom: 1; }
+
+html {
+  font-size: 16px; }
+
+/*svg{
+  margin-left: 12em;
+}*/
+
+body {
+  /*background-color: #333333;*/
+  /*font-family: 'Roboto', sans-serif;*/
+  /*margin: 30px;*/
+  /*padding: 200px;*/
+  font-family: helvetica;
+  padding-top: 140px;
+  scroll-behavior: smooth;
+ }
+
+ /*svg {
+   margin-left: 170px;
+ }*/
+
+.summaryAndRelations{
+  padding: 0px 100px;
+  text-align: left;
+  text-indent: 50px;
+}
+
+.relations{
+  margin-left: 16em;
+  margin-right: 16em;
+  margin-top: 5em;
+  margin-bottom: 5em;
+  border: solid;
+  border-width: .7px;
+  border-color: #0099ff;
+  background-color: #fbfbf8;
+  opacity: 0.82;
+  box-shadow: 10px 10px 5px #888888;
+}
+
+
+h1 {
+  /*color: white;*/
+  text-align: center;
+  font-size: 30px;
+  margin-bottom: 50px; }
+
+h2 {
+  /*color: white;*/
+  font-weight: 800;
+  text-transform: uppercase;
+  /*margin-top: 20px;*/
+  margin-bottom: 20px; }
+
+h3{
+  /*color: white;*/
+}
+
+strong {
+  font-weight: bold; }
+
+
+
+/*#App {
+  max-width: 960px;
+  margin-left: auto;
+  margin-right: auto; }*/
+
+.Collapsible{
+  background-color: white;
+  margin-bottom: 3em;
+  opacity: 0.8;
+ }
+
+ .outerColl{
+   margin-left:22vw;
+   margin-right:22vw;
+   padding-top: 3em;
+ }
+
+ .outerColl:hover{
+   margin-left:12vw;
+   margin-right:12vw;
+   transition-duration: 1s;
+ }
+
+ .innerColl{
+   padding-left: 2em;
+   padding-right: 2em;
+ }
+
+ .Collapsible:hover {
+   cursor: pointer;
+   box-shadow: 10px 10px 5px #888888;
+   transform: scale(1.02);
+   transition-duration: 1s;
+ }
+
+
+.Collapsible__contentInner {
+  padding: 10px;
+  border: 1px solid #ebebeb;
+  border-top: 0; }
+  .Collapsible__contentInner p {
+    text-align: left;
+    margin-bottom: 10px;
+    font-size: 14px;
+    line-height: 20px; }
+    .Collapsible__contentInner p:last-child {
+      margin-bottom: 0; }
+
+.Collapsible__trigger {
+  display: block;
+  font-weight: 400;
+  text-decoration: none;
+  color: #333333;
+  position: relative;
+  border: 1px solid white;
+  padding: 10px;
+  background: #13bcef;
+  color: white; }
+  .Collapsible__trigger:after {
+    font-family: 'FontAwesome';
+    content: '\f107';
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    display: block;
+    transition: transform 300ms; }
+  .Collapsible__trigger.is-open:after {
+    transform: rotateZ(180deg); }
+  .Collapsible__trigger.is-disabled {
+    opacity: 0.5;
+    background-color: grey; }
+
+.CustomTriggerCSS {
+  background-color: lightcoral;
+  transition: background-color 200ms ease; }
+
+.CustomTriggerCSS--open {
+  background-color: darkslateblue; }
+
+.articles{
+  margin-left: 15em;
+  margin-right: 15em;
+  border: solid;
+  border-width: .7px;
+  border-color: #0099ff;
+  background-color: white;
+  opacity: 0.82;
+  box-shadow: 10px 10px 5px #888888;
+}
+
+.artTitle{
+  padding-left: 2em;
+  font-size: 17px;
+  color: steelblue;
+}
+
+.artTitle:hover{
+  transform: scale(1.05);
+  transition-duration: 1s;
+}
+
+.mainHeading{
+  font-size: 78px;
+  /*color: #13bcef;*/
+  text-shadow: 2px 2px lightsteelblue;
+  /*opacity: 0.75;*/
+}
+
+.mainHeading:hover{
+  transform: scale(1.05);
+  transition-duration: 1s;
+}
+
+.credits{
+  font-size: 10px;
+  position: absolute;
+  right: 20em;
+  top: 9em;
+}
+
+/*.tester{
+  color: red;
+  border-radius: 3px;
+}*/
+
+.tester {
+  color: #6496c8;
+  background: rgba(0,0,0,0);
+  border: solid 5px #6496c8;
+}
+.tester:hover{
+  border-color: #13bcef;
+  color: #13bcef;
+  transform: scale(1.1);
+  transition-duration: 1s;
+}
+
+.tester:active{
+  border-color: #27496d;
+  color: #27496d;
+}
+
+input[type='checkbox'] {
+    -webkit-appearance:none;
+    outline:0;
+    width:22px;
+    height:22px;
+    background:white;
+    transition-duration: 1.2s;
+    border-radius:20px;
+    border:2px solid black;
+}
+
+input[type='checkbox']:checked {
+    background: #20D2AA;
+    transition-duration: 1.2s;
+}
+
+input[type='checkbox']:hover {
+  cursor: pointer;
+  box-shadow: 6px 6px 2px #888888;
+  transform: scale(1.2);
+  transition-duration: 1.2s;
+}
+
+label:hover{
+  cursor: pointer;
+}
+
+.finalSummary{
+  margin-left: 14em;
+  margin-right: 14em;
+  border: solid;
+  border-width: .7px;
+  border-color: #0099ff;
+  background-color: white;
+  opacity: 0.82;
+  box-shadow: 10px 10px 5px #888888;
+}
+
+.compressionStats{
+  margin-left: 24em;
+  margin-right: 24em;
+  border: solid;
+  border-width: .7px;
+  border-color: #0099ff;
+  background-color: white;
+  opacity: 0.82;
+  box-shadow: 10px 10px 5px #888888;
+}
+
+.articleMetadata{
+  margin-left: 24em;
+  margin-right: 24em;
+  border: solid;
+  border-width: .7px;
+  border-color: #0099ff;
+  background-color: white;
+  opacity: 0.82;
+  box-shadow: 10px 10px 5px #888888;
+}
+
+.pairData{
+  margin-left: 24em;
+  margin-right: 24em;
+  border: solid;
+  border-width: .7px;
+  border-color: #0099ff;
+  background-color: white;
+  opacity: 0.82;
+  box-shadow: 10px 10px 5px #888888;
+}

@@ -1,0 +1,376 @@
+import React, { Component } from 'react';
+import * as d3 from 'd3';
+import axios from 'axios';
+import ArticleCell from '../ArticleCell/ArticleCell.js';
+import {Panel} from 'pui-react-panels';
+import * as Scroll from 'react-scroll';
+var scroll = Scroll.animateScroll;
+
+var instance;
+export default class TreeRel extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      storiesResponse : [],
+      pair: "None",
+      selected: false,
+      link: "",
+    };
+
+  }
+
+  // setStoriesResponse(event) {
+  //   this.setState({ storiesResponse: event.target.value });
+  // }
+
+  // onButtonClickArticles = (e) => {
+  //   console.log("sup?");
+  //   console.log(instance);
+  // }
+
+  eachArticle(art, i){
+    return(
+      <ArticleCell key={i} index={i} article={art} onSelectLink={instance.handleSelectedArticleLink}/>
+    )
+  }
+
+  componentDidMount(){
+    instance = this;
+  }
+
+  componentWillMount() {
+    //var viz = (<p>hello</p>);
+    //window.addEventListener('resize', updateDepth);
+
+    var treeData = this.props.treeData;
+    var screenWidth = this.props.screenWidth;
+    var depth = screenWidth>1500 ? 550 : 330;
+    //console.log(test);
+    //console.log(screenWidth);
+    //var theResponse;
+    // function updateDepth(){
+    //   depth = window.innerWidth - 300;
+    //   this.setState();
+    // }
+
+    // Set the dimensions and margins of the diagram
+    var margin = {top: 20, right: 90, bottom: 30, left: 90},
+        width = 2048 - margin.left - margin.right,
+        height = 1024 - margin.top - margin.bottom;
+
+
+    // append the svg object to the body of the page
+    // appends a 'group' element to 'svg'
+    // moves the 'group' element to the top left margin
+    var svg = d3.select("body").append("svg")
+        .attr("width", width + margin.right + margin.left)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform", "translate("
+              + (margin.left+190) + "," + margin.top + ")");
+
+    var i = 0,
+        duration = 750,
+        root;
+
+    // declares a tree layout and assigns the size
+    var treemap = d3.tree().size([height, width]);
+
+    // Assigns parent, children, height, depth
+    root = d3.hierarchy(treeData, function(d) { return d.children; });
+    root.x0 = height/2;
+    root.y0 = 0;
+
+    // Collapse after the second level
+    root.children.forEach(collapse);
+
+    update(root);
+
+    // Collapse the node and all it's children
+    function collapse(d) {
+      if(d.children) {
+        d._children = d.children
+        d._children.forEach(collapse)
+        d.children = null
+      }
+    }
+
+    function update(source) {
+
+      // Assigns the x and y position for the nodes
+      var treeData = treemap(root);
+
+      // Compute the new tree layout.
+      var nodes = treeData.descendants(),
+          // links = treeData.descendants().slice(1);
+          links = treeData.links();
+
+          //console.log(nodes)
+          //console.log(links)
+
+      // Normalize for fixed-depth. Length of the links
+      nodes.forEach(function(d){ d.y = d.depth * depth});
+
+      // ****************** Nodes section ***************************
+
+      // Update the nodes...
+      var node = svg.selectAll('g.node')
+          .data(nodes, function(d) {return d.id || (d.id = ++i); });
+
+      // Enter any new modes at the parent's previous position.
+      var nodeEnter = node.enter().append('g')
+          .attr('class', 'node')
+          .attr("transform", function(d) {
+            return "translate(" + source.y0 + "," + source.x0 + ")";
+        })
+        .on('click', click);
+
+      // Add Circle for the nodes
+      nodeEnter.append('circle')
+          .attr('class', 'node')
+          .attr('r', 1e-6)
+          .style("fill", function(d) {
+              return d._children ? "#13bcef" : "#fff";
+          });
+
+      // Add labels for the nodes
+      nodeEnter.append('text')
+          .attr("dy", ".35em")
+          .attr("x", function(d) {
+              return d.children || d._children ? -13 : 13;
+          })
+          .attr("text-anchor", function(d) {
+              return d.children || d._children ? "end" : "start";
+          })
+          .text(function(d) { return d.data.name; });
+
+      // nodeEnter.on("click", function() {
+      //   //d3.select(this).attr("r", 12);
+      //   //console.log("hello");
+      //   window.open('http://google.com/search?q='+ 'Abraham Lincoln');
+      // });
+
+      // circle.on("click", function() {
+      //   d3.select(this).attr("r", 12);
+      // });
+
+      // UPDATE
+      var nodeUpdate = nodeEnter.merge(node);
+
+      // Transition to the proper position for the node
+      nodeUpdate.transition()
+        .duration(duration)
+        .attr("transform", function(d) {
+            return "translate(" + d.y + "," + d.x + ")";
+         });
+
+      // Update the node attributes and style
+      nodeUpdate.select('circle.node')
+        .attr('r', 10)
+        .style("fill", function(d) {
+            return d._children ? "#13bcef" : "#fff";
+        })
+        .attr('cursor', 'pointer');
+
+
+      // Remove any exiting nodes
+      var nodeExit = node.exit().transition()
+          .duration(duration)
+          .attr("transform", function(d) {
+              return "translate(" + source.y + "," + source.x + ")";
+          })
+          .remove();
+
+      // On exit reduce the node circles size to 0
+      nodeExit.select('circle')
+        .attr('r', 1e-6);
+
+      // On exit reduce the opacity of text labels
+      nodeExit.select('text')
+        .style('fill-opacity', 1e-6);
+
+      // ****************** links section ***************************
+
+      // Update the links...
+      var link = svg.selectAll('path.link')
+          .data(links, function(d) { return d.target.id; })
+
+
+          var linktext = svg.selectAll("g.link")
+            .data(links, function(d){
+              return d.target.id;
+            });
+
+
+            linktext.enter()
+                    .insert("g")
+                    .attr("class", "link")
+                    .attr("transform", function (d) {
+                      return "translate(" + ((d.source.y + d.target.y) /2) + "," + ((d.source.x + d.target.x) /2) + ")";
+                    })
+                    .append("text")
+                    .attr("dy", ".35em")
+                    .attr("text-anchor", "middle")
+                    .text(function (d) {
+                    //console.log(d.target.name);
+                    //return d.source.y.name;
+                        //return d.target.id;
+                        return d.target.data.action
+                        //return d.target.data.children[0].action;
+                    })
+
+            linktext.transition()
+                    .duration(duration)
+                    .attr("transform", function (d) {
+                      //console.log(d.target.id)
+                      //console.log(d.target.data.name);
+                      return "translate(" + ((d.source.y + d.target.y) /2) + "," + ((d.source.x + d.target.x) /2) + ")";
+                    });
+
+            // linktext.attr("transform", function (d) {
+            //           return "translate(" + ((d.source.y + d.target.y) /2) + "," + ((d.source.x + d.target.x) /2) + ")";
+            //         })
+
+            // Transition link text to their new positions
+
+            // linktext.transition()
+            //         .duration(duration)
+            //         .attr("transform", function (d) {
+            //         return "translate(" + ((d.source.y + d.target.y) /2) + "," + ((d.source.x + d.target.x) /2) + ")";
+            //     })
+
+            //Transition exiting link text to the parent's new position.
+            linktext.exit().transition()
+            .remove();
+
+
+
+      // Enter any new links at the parent's previous position.
+      var linkEnter = link.enter().insert('path', "g")
+          .attr("class", "link")
+          .attr('d', function(d){
+            //return link(d)
+            // var o = {x: source.x, y: source.y}
+            // return diagonal(o,o)
+             return diagonal(d)
+
+          });
+
+      // UPDATE
+      var linkUpdate = linkEnter.merge(link);
+
+      // Transition back to the parent element position
+      linkUpdate.transition()
+          .duration(duration)
+          .attr('d', function(d){ return diagonal(d) });
+
+          // .attr('d', function(d){ return diagonal(d, d.parent) });
+
+      // Remove any exiting links
+      /*var linkExit = */
+      link.exit().transition()
+          .duration(duration)
+          .remove();
+
+      // Store the old positions for transition.
+      nodes.forEach(function(d){
+        d.x0 = d.x;
+        d.y0 = d.y;
+      });
+
+      // Creates a curved (diagonal) path from parent to the child nodes
+      // function diagonal(s, d) {
+      //
+      //   var path = `M ${s.y} ${s.x}
+      //           C ${(s.y + d.y) / 2} ${s.x},
+      //             ${(s.y + d.y) / 2} ${d.x},
+      //             ${d.y} ${d.x}`
+      //
+      //   return path;
+      // }
+
+      function diagonal(d) {
+        return "M" + d.source.y + "," + d.source.x
+            + "C" + (d.source.y + d.target.y) / 2 + "," + d.source.x
+            + " " + (d.source.y + d.target.y) / 2 + "," + d.target.x
+            + " " + d.target.y + "," + d.target.x;
+      }
+
+      // Toggle children on click.
+      function click(d){
+        //var storiesResponse;
+        if (d.children) {
+            //console.log(d.parent.data.name);
+            d._children = d.children;
+            d.children = null;
+          } else {
+            //console.log(d.parent.data.name);
+            d.children = d._children;
+            d._children = null;
+            //console.log(d.data);
+          }
+          if(d.data.action!==" "){
+            //Google Search
+            //window.open('http://google.com/search?q='+ d.parent.data.name + ' ' + d.data.name);
+
+            //Watson Discovery Article Search
+            axios.post("http://NLUBase.mybluemix.net/stories", {
+              text: d.parent.data.name + ' ' + d.data.name
+            }).then(response => {
+              //console.log(JSON.stringify(response.data, undefined, 10));
+              instance.setState({pair: d.parent.data.name + ' | ' + d.data.name});
+              instance.setState({storiesResp: response});
+              instance.setState({selected: true});
+              scroll.scrollTo(500);
+            }).catch(function(error){
+              console.log(error);
+            })
+           }
+         update(d);
+         //return storiesResponse;
+      }
+    }
+  }
+
+  componentWillUnmount(){
+    d3.select("svg").remove();
+  }
+
+  handleSelectedArticleLink=(targetLink)=>{
+    //this.setState({link: targetLink});
+    //console.log(targetLink);
+    this.props.obtainLink(targetLink);
+  }
+
+  render() {
+    var viz = (<div/>);
+    if(this.state.selected){
+        viz =(
+          <div>
+            <div  className="pairData">
+            <Panel className="bg-neutral-11 box-shadow-1">
+            <h3><div><strong>Selected Pair:</strong> {this.state.pair}</div></h3>
+            <div>{this.state.storiesResp.data.matching_results} <strong>related stories</strong></div>
+            <h3><strong>Top 5 Recent News Stories Related To:</strong> {this.state.pair}:</h3>
+            </Panel>
+            </div>
+            <br/>
+            <div className="articles">{this.state.storiesResp.data.results.map(this.eachArticle)}</div>
+          </div>
+        )
+    }
+
+    return(
+      <div>
+        <br/>
+        <div id="tree-rel" />
+        <p><em>Click on a terminal node to discover more relationship-related articles</em></p>
+        {viz}
+        {/*<div>{this.state.pair}</div>*/}
+        {/*<h3>Selected Relationship: {this.state.pair}</h3>*/}
+        {/*<center><div className="button w3-button w3-white w3-border w3-border-blue w3-round-large" onClick={this.onButtonClickArticles}>See Related News Articles</div></center>*/}
+      </div>
+    );
+  }
+ }
